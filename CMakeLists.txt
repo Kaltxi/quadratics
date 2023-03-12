@@ -12,8 +12,7 @@ option(ENABLE_ASAN "Enable address sanitizer" FALSE)
 option(ENABLE_TESTING "Enable building tests" FALSE)
 option(ENABLE_CLANG_TIDY "Enable testing with clang-tidy" FALSE)
 option(ENABLE_CPPCHECK "Enable testing with cppcheck" FALSE)
-option(FORCE_COLORED_OUTPUT "Always produce ANSI-colored output (gcc/clang)." TRUE)
-option(DEBUG_LOGGING "Enabling debug logging" FALSE)
+option(FORCE_COLORED_OUTPUT "Always produce ANSI-colored output (gcc/clang)" TRUE)
 
 # Interface for options
 add_library(project_options INTERFACE)
@@ -93,29 +92,20 @@ if(ENABLE_CLANG_TIDY)
   endif()
 endif()
 
-# Tests
-if(ENABLE_TESTING)
-  enable_testing()
-  find_package(doctest REQUIRED)
-  include(CTest)
-  include(doctest)
+# Main library
+add_library(quadratics-lib
+  src/quadratic.cpp
+)
 
-  add_executable(quadratics-test
-    src/main.t.cpp
-  )
+target_include_directories(quadratics-lib PRIVATE src)
 
-  target_include_directories(quadratics-test PRIVATE src)
-
-  target_link_libraries(quadratics-test PRIVATE
-    doctest::doctest
+target_link_libraries(quadratics-lib
+  PRIVATE
     project_options
     project_warnings
-  )
+)
 
-  doctest_discover_tests(quadratics-test)
-endif()
-
-# Project
+# CLI executable
 add_executable(quadratics
   src/main.cpp
 )
@@ -126,4 +116,29 @@ target_link_libraries(quadratics
   PRIVATE
     project_options
     project_warnings
+    quadratics-lib
 )
+
+# Tests
+if(ENABLE_TESTING)
+  enable_testing()
+  find_package(doctest REQUIRED)
+  include(CTest)
+  include(doctest)
+
+  add_executable(quadratics-test
+    src/main.t.cpp
+    src/quadratic.t.cpp
+  )
+
+  target_include_directories(quadratics-test PRIVATE src)
+
+  target_link_libraries(quadratics-test PRIVATE
+    doctest::doctest
+    project_options
+    project_warnings
+    quadratics-lib
+  )
+
+  doctest_discover_tests(quadratics-test)
+endif()
