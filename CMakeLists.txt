@@ -93,21 +93,8 @@ if(ENABLE_CLANG_TIDY)
 endif()
 
 # Main library
-add_library(quadratics-lib
+add_library(quadratics
   src/quadratic.cpp
-)
-
-target_include_directories(quadratics-lib PRIVATE src)
-
-target_link_libraries(quadratics-lib
-  PRIVATE
-    project_options
-    project_warnings
-)
-
-# CLI executable
-add_executable(quadratics
-  src/main.cpp
 )
 
 target_include_directories(quadratics PRIVATE src)
@@ -116,7 +103,22 @@ target_link_libraries(quadratics
   PRIVATE
     project_options
     project_warnings
-    quadratics-lib
+)
+
+# CLI executable
+add_executable(quadratics_exe
+  src/main.cpp
+)
+
+set_property(TARGET quadratics_exe PROPERTY OUTPUT_NAME quadratics)
+
+target_include_directories(quadratics_exe PRIVATE src)
+
+target_link_libraries(quadratics_exe
+  PRIVATE
+    project_options
+    project_warnings
+    quadratics
 )
 
 # Tests
@@ -126,19 +128,19 @@ if(ENABLE_TESTING)
   include(CTest)
   include(doctest)
 
-  add_executable(quadratics-test
+  add_executable(quadratics_test
     src/main.t.cpp
     src/quadratic.t.cpp
   )
 
-  target_include_directories(quadratics-test PRIVATE src)
+  target_include_directories(quadratics_test PRIVATE src)
 
-  target_link_libraries(quadratics-test PRIVATE
+  target_link_libraries(quadratics_test PRIVATE
     doctest::doctest
     project_options
     project_warnings
-    quadratics-lib
+    quadratics
   )
 
-  doctest_discover_tests(quadratics-test)
+  doctest_discover_tests(quadratics_test)
 endif()
