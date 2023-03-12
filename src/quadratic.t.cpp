@@ -43,7 +43,7 @@ TEST_CASE("Always positive quadratic equation has no roots") {
   CHECK(solution::extremum(sol) == right_extremum);
 }
 
-// Equations like c = 0
+// Equations like `c = 0`
 TEST_CASE("Constant equation has no roots and extremum eqaul to the constant") {
   const Equation eq{0, 0, -2};
 
@@ -51,4 +51,16 @@ TEST_CASE("Constant equation has no roots and extremum eqaul to the constant") {
 
   CHECK(solution::num_roots(sol) == 0);
   CHECK(solution::extremum(sol) == -2.f);
+}
+
+// There exists one exception to the rule: the case of `0 = 0` when there are
+// actually infinite number of solutions, we ignore it for interface homogeneity
+TEST_CASE("Constant equation with c = 0 leads to no roots, despire inifite "
+          "number of them") {
+  const Equation eq{0, 0, 0};
+
+  const auto sol = solve(eq);
+
+  CHECK(solution::num_roots(sol) == 0);
+  CHECK(solution::extremum(sol) == 0.f);
 }
