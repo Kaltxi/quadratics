@@ -95,6 +95,7 @@ endif()
 # Main library
 add_library(quadratics
   src/quadratic.cpp
+  src/equationqueue.cpp
 )
 
 target_include_directories(quadratics PRIVATE src)
