@@ -1,7 +1,6 @@
 #pragma once
 #include <cmath>
 #include <string>
-#include <utility>
 #include <variant>
 
 namespace quadratics {
@@ -10,6 +9,8 @@ struct Equation {
   int a;
   int b;
   int c;
+
+  auto as_str() const -> std::string;
 };
 
 struct NoRoots {

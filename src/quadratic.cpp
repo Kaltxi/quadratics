@@ -1,7 +1,11 @@
 #include "quadratic.hpp"
-#include <cmath>
 
 namespace quadratics {
+
+auto Equation::as_str() const -> std::string {
+  return {"(" + std::to_string(a) + " " + std::to_string(b) + " " +
+          std::to_string(c) + ")"};
+}
 
 Solution solve(Equation eq) {
   const auto a = static_cast<float>(eq.a);

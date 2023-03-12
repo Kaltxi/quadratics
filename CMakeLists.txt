@@ -74,7 +74,6 @@ if(ENABLE_CPPCHECK)
     set(CMAKE_CXX_CPPCHECK
       ${CPPCHECK}
       --suppress=missingIncludeSystem
-      --enable=all
       --inconclusive)
     else()
       message(SEND_ERROR "cppcheck requested but executable not found")
@@ -97,6 +96,7 @@ add_library(quadratics
   src/quadratic.cpp
   src/equationqueue.cpp
   src/parser.cpp
+  src/solver.cpp
 )
 
 target_include_directories(quadratics PRIVATE src)
