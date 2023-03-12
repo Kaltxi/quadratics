@@ -103,6 +103,7 @@ add_library(quadratics
   src/equationqueue.cpp
   src/parser.cpp
   src/solver.cpp
+  src/runtime.cpp
 )
 
 target_include_directories(quadratics PRIVATE src)

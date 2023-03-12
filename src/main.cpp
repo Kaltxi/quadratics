@@ -1,9 +1,5 @@
-#include "equationqueue.hpp"
-#include "parser.hpp"
-#include "solver.hpp"
+#include "runtime.hpp"
 #include <iostream>
-#include <mutex>
-#include <thread>
 
 using namespace quadratics;
 
@@ -15,12 +11,7 @@ int main(const int count, char* args[]) {
     return 0;
   }
 
-  EquationQueue queue;
-  std::mutex stdout_mutex;
+  Runtime(count, args, 3)();
 
-  std::thread parser(Parser{Data{count, args}, queue});
-  std::thread solver(Solver{queue, stdout_mutex});
-
-  parser.join();
-  solver.join();
+  return 0;
 }
