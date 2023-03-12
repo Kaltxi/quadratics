@@ -9,6 +9,7 @@ project(quadratics
 # Add these to cmake to enable functionality
 option(ENABLE_COVERAGE "Enable coverage reporting (gcc/clang)" FALSE)
 option(ENABLE_ASAN "Enable address sanitizer" FALSE)
+option(ENABLE_TSAN "Enable thread sanitizer" FALSE)
 option(ENABLE_TESTING "Enable building tests" FALSE)
 option(ENABLE_CLANG_TIDY "Enable testing with clang-tidy" FALSE)
 option(ENABLE_CPPCHECK "Enable testing with cppcheck" FALSE)
@@ -26,6 +27,11 @@ endif()
 if(ENABLE_ASAN)
   target_compile_options(project_options INTERFACE -fsanitize=address)
   target_link_libraries(project_options INTERFACE -fsanitize=address)
+endif()
+
+if(ENABLE_TSAN)
+  target_compile_options(project_options INTERFACE -fsanitize=thread)
+  target_link_libraries(project_options INTERFACE -fsanitize=thread)
 endif()
 
 # Interface for warnings
