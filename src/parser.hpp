@@ -1,6 +1,7 @@
 #pragma once
 #include "equationqueue.hpp"
 #include "quadratic.hpp"
+#include <array>
 #include <optional>
 
 namespace quadratics {
@@ -27,6 +28,9 @@ public:
   void operator()();
 
 private:
+  static auto parse_coefficients(int position, int tail, char** inputs)
+      -> std::optional<std::array<int, 3>>;
+
   // Retrieve next equation or nothing if data end reached
   auto next_equation() -> std::optional<Equation>;
 
