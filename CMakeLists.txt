@@ -130,6 +130,20 @@ target_link_libraries(quadratics_exe
     quadratics
 )
 
+# Benchmark
+add_executable(quadratics_bench
+  benchmark/main.cpp
+)
+
+target_include_directories(quadratics_bench PRIVATE src benchmark)
+
+target_link_libraries(quadratics_bench
+  PRIVATE
+    project_options
+    project_warnings
+    quadratics
+)
+
 # Tests
 if(ENABLE_TESTING)
   enable_testing()

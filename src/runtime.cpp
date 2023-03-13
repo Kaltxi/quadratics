@@ -34,4 +34,14 @@ void Runtime::operator()() {
   }
 }
 
+void Runtime::serial() {
+  EquationQueue queue;
+  std::mutex stdout_mutex;
+  Parser parser{Data{size_, input_}, queue};
+  Solver solver{queue, stdout_mutex};
+
+  parser();
+  solver();
+}
+
 } // namespace quadratics

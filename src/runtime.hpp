@@ -13,6 +13,9 @@ public:
   // Setup, launch and join execution threads
   void operator()();
 
+  // Run program serially
+  void serial();
+
 private:
   int size_;
   char** input_;
