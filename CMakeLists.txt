@@ -130,20 +130,6 @@ target_link_libraries(quadratics_exe
     quadratics
 )
 
-# Benchmark
-add_executable(quadratics_bench
-  benchmark/main.cpp
-)
-
-target_include_directories(quadratics_bench PRIVATE src benchmark)
-
-target_link_libraries(quadratics_bench
-  PRIVATE
-    project_options
-    project_warnings
-    quadratics
-)
-
 # Tests
 if(ENABLE_TESTING)
   enable_testing()
@@ -167,3 +153,32 @@ if(ENABLE_TESTING)
 
   doctest_discover_tests(quadratics_test)
 endif()
+
+# Benchmark
+add_executable(quadratics_bench
+  tools/benchmark/main.cpp
+)
+
+target_include_directories(quadratics_bench PRIVATE src tools/benchmark)
+
+target_link_libraries(quadratics_bench
+  PRIVATE
+    project_options
+    project_warnings
+    quadratics
+)
+
+# Sample data generation tool
+
+add_executable(quadratics_gen
+  tools/gendata/main.cpp
+)
+
+target_include_directories(quadratics_gen PRIVATE src tools/gendata)
+
+target_link_libraries(quadratics_gen
+  PRIVATE
+    project_options
+    project_warnings
+    quadratics
+)
