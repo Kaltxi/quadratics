@@ -31,44 +31,20 @@ auto Parser::next_equation() -> std::optional<Equation> {
   auto left = data_.size - current_pos_;
 
   while (left > 0) {
-    if (left >= 3) {
+    auto tail = left >= 3 ? 3 : left;
 
-      try {
-        const Equation eq{std::stoi(data_.input[current_pos_]),
-                          std::stoi(data_.input[current_pos_ + 1]),
-                          std::stoi(data_.input[current_pos_ + 2])};
-        current_pos_ += 3;
-        return eq;
-      } catch (const std::invalid_argument&) {
-        current_pos_ += 3;
-        left -= 3;
-        continue;
-      }
-    }
+    auto a = data_.input[current_pos_];
+    auto b = tail >= 2 ? data_.input[current_pos_ + 1] : 0;
+    auto c = tail >= 3 ? data_.input[current_pos_ + 2] : 0;
 
-    if (left == 2) {
-      try {
-        const Equation eq{std::stoi(data_.input[current_pos_]),
-                          std::stoi(data_.input[current_pos_ + 1]), 0};
-        current_pos_ += 2;
-        return eq;
-      } catch (const std::invalid_argument&) {
-        current_pos_ += 2;
-        left -= 2;
-        continue;
-      }
-    }
-
-    if (left == 1) {
-      try {
-        const Equation eq{std::stoi(data_.input[current_pos_]), 0, 0};
-        current_pos_ += 1;
-        return eq;
-      } catch (const std::invalid_argument&) {
-        current_pos_ += 1;
-        left -= 1;
-        continue;
-      }
+    try {
+      const Equation eq{std::stoi(a), std::stoi(b), std::stoi(c)};
+      current_pos_ += tail;
+      return eq;
+    } catch (const std::invalid_argument&) {
+      current_pos_ += tail;
+      left -= tail;
+      continue;
     }
   }
 
