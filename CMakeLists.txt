@@ -35,23 +35,32 @@ if(ENABLE_TSAN)
 endif()
 
 # Interface for warnings
+if (UNIX)
+  add_library(project_warnings INTERFACE)
+  target_compile_options(project_warnings INTERFACE
+    -Wall
+    -Wextra
+    -Wshadow
+    -Wnon-virtual-dtor
+    -Wold-style-cast
+    -Wcast-align
+    -Wunused
+    -Woverloaded-virtual
+    -Wpedantic
+    -Wconversion
+    -Wsign-conversion
+    -Wnull-dereference
+    -Wdouble-promotion
+    -Wformat=2
+  )
+endif()
+
+if (MSVC)
 add_library(project_warnings INTERFACE)
 target_compile_options(project_warnings INTERFACE
-  -Wall
-  -Wextra
-  -Wshadow
-  -Wnon-virtual-dtor
-  -Wold-style-cast
-  -Wcast-align
-  -Wunused
-  -Woverloaded-virtual
-  -Wpedantic
-  -Wconversion
-  -Wsign-conversion
-  -Wnull-dereference
-  -Wdouble-promotion
-  -Wformat=2
+  -W4
 )
+endif()
 
 # GCC specific warnings
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")

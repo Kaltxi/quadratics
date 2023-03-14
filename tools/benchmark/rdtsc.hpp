@@ -3,13 +3,16 @@
 #include <array>
 #include <cstddef>
 #include <cstdint>
+#include <intrin.h>
+
+#pragma intrinsic(__rdtsc)
 
 namespace quadratics {
 
 template <typename F> uint64_t clocks_once(F&& func) {
-  const auto t0 = __builtin_ia32_rdtsc();
+  const auto t0 = __rdtsc();
   func();
-  const auto t1 = __builtin_ia32_rdtsc();
+  const auto t1 = __rdtsc();
 
   return t1 - t0;
 }
@@ -20,11 +23,11 @@ template <typename F> double clocks(F&& func) {
   auto sum = 0.;
 
   for (size_t i = 0; i < LOOPS; ++i) {
-    const auto t0 = __builtin_ia32_rdtsc();
+    const auto t0 = __rdtsc();
 
     func();
 
-    const auto t1 = __builtin_ia32_rdtsc();
+    const auto t1 = __rdtsc();
     const auto elapsed = t1 - t0;
     sum += static_cast<double>(elapsed);
   }
@@ -39,11 +42,11 @@ template <typename F> std::pair<double, uint64_t> clocks_with_median(F&& func) {
   std::array<uint64_t, LOOPS> readings;
 
   for (size_t i = 0; i < LOOPS; ++i) {
-    const auto t0 = __builtin_ia32_rdtsc();
+    const auto t0 = __rdtsc();
 
     func();
 
-    const auto t1 = __builtin_ia32_rdtsc();
+    const auto t1 = __rdtsc();
     const auto elapsed = t1 - t0;
     sum += static_cast<double>(elapsed);
     readings[i] = elapsed;
