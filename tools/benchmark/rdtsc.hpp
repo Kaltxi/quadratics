@@ -3,9 +3,11 @@
 #include <array>
 #include <cstddef>
 #include <cstdint>
-#include <intrin.h>
 
+#ifdef _WIN32
+#include <intrin.h>
 #pragma intrinsic(__rdtsc)
+#endif
 
 namespace quadratics {
 
