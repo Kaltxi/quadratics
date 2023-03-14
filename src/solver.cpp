@@ -37,8 +37,8 @@ void Solver::operator()() {
     queue_lock.unlock();
 
     for (const auto eq : equations) {
-      const auto sol = solve(eq);
-      solutions.push_back(eq.as_str() + " => " + solution::as_str(sol) + "\n");
+      const auto sol = eq.solve();
+      solutions.push_back(eq.as_str() + " => " + sol.as_str() + "\n");
     }
 
     const std::lock_guard stdout_lock(stdout_mutex_);
@@ -67,8 +67,8 @@ void Solver::serial() {
     }
 
     for (const auto eq : equations) {
-      const auto sol = solve(eq);
-      solutions.push_back(eq.as_str() + " => " + solution::as_str(sol) + "\n");
+      const auto sol = eq.solve();
+      solutions.push_back(eq.as_str() + " => " + sol.as_str() + "\n");
     }
 
     for (const auto& solution : solutions) {

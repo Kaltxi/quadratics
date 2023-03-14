@@ -26,15 +26,15 @@ inline std::string format_clocks(std::pair<double, uint64_t> data) {
 // Measure a single equation solution
 inline std::string bench_solve() {
   Equation no_roots_eq{2, 2, 2};
-  auto no_roots_fn = [no_roots_eq] { solve(no_roots_eq); };
+  auto no_roots_fn = [no_roots_eq] { no_roots_eq.solve(); };
   auto no_roots = clocks_with_median(no_roots_fn);
 
   Equation one_root_eq{2, 2, 2};
-  auto one_root_fn = [one_root_eq] { solve(one_root_eq); };
+  auto one_root_fn = [one_root_eq] { one_root_eq.solve(); };
   auto one_root = clocks_with_median(one_root_fn);
 
   Equation two_roots_eq{1, -2, 1};
-  auto two_roots_fn = [two_roots_eq] { solve(two_roots_eq); };
+  auto two_roots_fn = [two_roots_eq] { two_roots_eq.solve(); };
   auto two_roots = clocks_with_median(two_roots_fn);
 
   // clang-format off

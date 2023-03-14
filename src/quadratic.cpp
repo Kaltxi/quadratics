@@ -1,60 +1,101 @@
 #include "quadratic.hpp"
+#include <string>
 
 namespace quadratics {
 
-auto Equation::as_str() const -> std::string {
-  return {"(" + std::to_string(a) + " " + std::to_string(b) + " " +
-          std::to_string(c) + ")"};
+auto Solution::as_str() const -> std::string {
+  switch (root_num) {
+  case Roots::None: {
+    std::string str;
+    str.reserve(22);
+    str.append("no roots Xmin=");
+    str.append(std::to_string(min));
+    return str;
+  }
+  case Roots::One: {
+    std::string str;
+    str.reserve(24);
+    str.append("(");
+    str.append(std::to_string(x1));
+    str.append(") Xmin=");
+    str.append(std::to_string(min));
+    return str;
+  }
+  case Roots::Two: {
+    std::string str;
+    str.reserve(35);
+    str.append("(");
+    str.append(std::to_string(x1));
+    str.append(",");
+    str.append(std::to_string(x2));
+    str.append(") Xmin=");
+    str.append(std::to_string(min));
+    return str;
+  }
+  }
 }
 
-Solution solve(Equation eq) {
-  const auto a = static_cast<float>(eq.a);
-  const auto b = static_cast<float>(eq.b);
-  const auto c = static_cast<float>(eq.c);
+auto Solution::num_roots() const -> int {
+  if (root_num == Roots::None) {
+    return 0;
+  } else if (root_num == Roots::One) {
+    return 1;
+  } else {
+    return 2;
+  }
+}
 
-  if (eq.a == 0 && eq.b == 0) {
-    const auto extremum_ = c;
-    return NoRoots{extremum_};
+auto Equation::solve() const -> Solution {
+  const auto af = static_cast<float>(a);
+  const auto bf = static_cast<float>(b);
+  const auto cf = static_cast<float>(c);
+
+  // Parallel to x line
+  if (a == 0 && b == 0) {
+    const auto extremum_ = cf;
+    return Solution{NAN, NAN, extremum_, Solution::Roots::None};
   }
 
-  if (eq.a == 0) {
-    const auto root = -c / b;
-    return OneRoot{root, root};
+  // Linear equation
+  if (a == 0) {
+    const auto root = -cf / bf;
+    return Solution{root, root, root, Solution::Roots::One};
   }
 
-  const auto discriminant = eq.b * eq.b - 4 * eq.a * eq.c;
-  const auto extremum_ = -0.5f * b / a;
+  const auto discriminant = b * b - 4 * a * c;
+  const auto extremum_ = -0.5f * bf / af;
 
+  // No roots
   if (discriminant < 0) {
-    return NoRoots{extremum_};
+    return Solution{NAN, NAN, extremum_, Solution::Roots::None};
   }
 
+  // One root
   if (discriminant == 0) {
     const auto root = extremum_;
-    return OneRoot{root, root};
+    return Solution{root, root, extremum_, Solution::Roots::One};
   }
 
+  // Two roots
   const auto half_width =
-      0.5f * std::sqrt(static_cast<float>(discriminant)) / a;
+      0.5f * std::sqrt(static_cast<float>(discriminant)) / af;
   const auto root1 = extremum_ - half_width;
   const auto root2 = extremum_ + half_width;
 
-  return TwoRoots{root1, root2, extremum_};
+  return Solution{root1, root2, extremum_, Solution::Roots::Two};
 }
 
-std::string impl::AsStr::operator()(const NoRoots& solution) const {
-  return {"no roots Xmin=" + std::to_string(solution.min)};
-}
-
-std::string impl::AsStr::operator()(const OneRoot& solution) const {
-  return {"(" + std::to_string(solution.x) +
-          ") Xmin=" + std::to_string(solution.min)};
-}
-
-std::string impl::AsStr::operator()(const TwoRoots& solution) const {
-  return {"(" + std::to_string(solution.x1) + ',' +
-          std::to_string(solution.x2) +
-          ") Xmin=" + std::to_string(solution.min)};
+auto Equation::as_str() const -> std::string {
+  std::string str;
+  str.reserve(15);
+  str.append("(");
+  str.append(std::to_string(a));
+  str.append(" ");
+  str.append(std::to_string(b));
+  str.append(" ");
+  str.append(std::to_string(c));
+  str.append(")");
+  return str;
 }
 
 } // namespace quadratics
