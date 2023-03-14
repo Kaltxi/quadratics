@@ -6,6 +6,14 @@
 
 namespace quadratics {
 
+template <typename F> uint64_t clocks_once(F&& func) {
+  const auto t0 = __builtin_ia32_rdtsc();
+  func();
+  const auto t1 = __builtin_ia32_rdtsc();
+
+  return t1 - t0;
+}
+
 template <typename F> double clocks(F&& func) {
   constexpr auto LOOPS = 10000;
 

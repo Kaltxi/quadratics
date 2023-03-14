@@ -13,6 +13,7 @@ int main(int arg_count, char* args[]) {
   // Skipping the first arg which contains program's name
   results.push_back(bench_runtime(arg_count - 1, args + 1));
   results.push_back(bench_solve());
+  results.push_back(bench_parser_and_solver_serial(arg_count - 1, args + 1));
   print_vec(results);
 
   return 0;

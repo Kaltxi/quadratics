@@ -1,7 +1,9 @@
 #pragma once
+#include "parser.hpp"
 #include "quadratic.hpp"
 #include "rdtsc.hpp"
 #include "runtime.hpp"
+#include "solver.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -51,6 +53,22 @@ inline std::string bench_runtime(int size, char** input) {
   return "FULL RUNTIME WITH PASSED ARGS:\n"
          "  Threaded runtime: " +
          format_clocks(threaded) + "  Serial runtime: " + format_clocks(serial);
+}
+
+// Measure serial performance of parser and solver separately
+inline std::string bench_parser_and_solver_serial(int size, char** input) {
+  EquationQueue queue;
+  std::mutex stdout_mutex;
+  Parser parser{Data{size, input}, queue, BATCH_SIZE};
+  Solver solver{queue, stdout_mutex, BATCH_SIZE};
+
+  auto parser_result = clocks_once(parser);
+  auto solver_result = clocks_once([&solver] { solver.serial(); });
+
+  return "PARSER AND SOLVER SERIAL:\n"
+         "  Parser: " +
+         std::to_string(parser_result) + "\n" +
+         "  Solver: " + std::to_string(solver_result) + "\n";
 }
 
 } // namespace quadratics
