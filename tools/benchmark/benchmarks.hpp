@@ -18,6 +18,7 @@ inline std::string format_clocks(std::pair<double, uint64_t> data) {
   return std::to_string(data.first) + " " + std::to_string(data.second) + "\n";
 }
 
+// Measure a single equation solution
 inline std::string bench_solve() {
   Equation no_roots_eq{2, 2, 2};
   auto no_roots_fn = [no_roots_eq] { solve(no_roots_eq); };
@@ -39,6 +40,7 @@ inline std::string bench_solve() {
   // clang-format on
 }
 
+// Measure whole runtime, both threaded and serial
 inline std::string bench_runtime(int size, char** input) {
   Runtime runtime{size, input, 0};
   auto threaded = clocks_with_median(runtime);
