@@ -2,6 +2,7 @@
 #include "equationqueue.hpp"
 #include "quadratic.hpp"
 #include <array>
+#include <cstddef>
 #include <optional>
 
 namespace quadratics {
@@ -15,7 +16,7 @@ struct Data {
 // them in the queue
 class Parser {
 public:
-  Parser(Data data, EquationQueue& queue);
+  Parser(Data data, EquationQueue& queue, size_t batch_size = 0);
 
   // Move constructible to be used as thread functor
   Parser(Parser&&) = default;
@@ -37,6 +38,7 @@ private:
 private:
   Data data_;
   int current_pos_{0};
+  size_t batch_size_;
   EquationQueue& queue_;
 };
 

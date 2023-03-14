@@ -7,8 +7,9 @@
 
 namespace quadratics {
 
-Runtime::Runtime(int size, char** input, std::size_t threads)
-    : size_(size), input_(input), threads_(threads) {}
+Runtime::Runtime(const int size, char** input, const size_t threads,
+                 const size_t batch_size)
+    : size_(size), input_(input), threads_(threads), batch_size_(batch_size) {}
 
 void Runtime::operator()() {
   // Minimum number of threads used is 2 - one for parser and one for solver
@@ -21,10 +22,10 @@ void Runtime::operator()() {
   std::vector<std::thread> threads;
   threads.reserve(solver_threads + 1);
 
-  threads.emplace_back(Parser{Data{size_, input_}, queue});
+  threads.emplace_back(Parser{Data{size_, input_}, queue, batch_size_});
 
   for (size_t i = 0; i < solver_threads; ++i) {
-    threads.emplace_back(Solver{queue, stdout_mutex});
+    threads.emplace_back(Solver{queue, stdout_mutex, batch_size_});
   }
 
   for (auto& thread : threads) {
@@ -35,8 +36,8 @@ void Runtime::operator()() {
 void Runtime::serial() {
   EquationQueue queue;
   std::mutex stdout_mutex;
-  Parser parser{Data{size_, input_}, queue};
-  Solver solver{queue, stdout_mutex};
+  Parser parser{Data{size_, input_}, queue, batch_size_};
+  Solver solver{queue, stdout_mutex, batch_size_};
 
   parser();
   solver();

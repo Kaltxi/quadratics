@@ -15,7 +15,7 @@ int main(const int arg_count, char* args[]) {
   }
 
   // Skipping the first arg which contains program's name
-  Runtime(arg_count - 1, args + 1, 3)();
+  Runtime(arg_count - 1, args + 1)();
 
   return 0;
 }

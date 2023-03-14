@@ -9,7 +9,7 @@ class Runtime {
 public:
   // Predetermined number of threads to use can be passed, passing non-positive
   // number will lead to automatic hardware thread number detection
-  Runtime(int size, char** input, std::size_t threads = 0);
+  Runtime(int size, char** input, size_t threads = 0, size_t batch_size = 50);
 
   // Runtime currently does not actually have any runtime state, only initial
   // data, but it may in the future. For now is neither movable nor copyable.
@@ -30,7 +30,8 @@ private:
 private:
   int size_;
   char** input_;
-  std::size_t threads_;
+  size_t threads_;
+  size_t batch_size_;
 };
 
 } // namespace quadratics

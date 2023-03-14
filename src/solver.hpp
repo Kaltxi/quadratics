@@ -1,5 +1,6 @@
 #pragma once
 #include "equationqueue.hpp"
+#include <cstddef>
 #include <mutex>
 
 namespace quadratics {
@@ -8,7 +9,7 @@ namespace quadratics {
 // to `stdin`
 class Solver {
 public:
-  Solver(EquationQueue& queue, std::mutex& stdout_mutex);
+  Solver(EquationQueue& queue, std::mutex& stdout_mutex, size_t batch_size = 1);
 
   // Move constructible to be used as thread functor
   Solver(Solver&&) = default;
@@ -19,9 +20,13 @@ public:
   // Solver execution loop
   void operator()();
 
+  // Ignore locks for serial execution
+  void serial();
+
 private:
   EquationQueue& queue_;
   std::mutex& stdout_mutex_;
+  size_t batch_size_;
 };
 
 } // namespace quadratics

@@ -8,6 +8,8 @@
 
 namespace quadratics {
 
+static constexpr size_t BATCH_SIZE = 50;
+
 inline void print_vec(const std::vector<std::string>& vec) {
   for (auto& string : vec) {
     std::cout << string;
@@ -42,7 +44,7 @@ inline std::string bench_solve() {
 
 // Measure whole runtime, both threaded and serial
 inline std::string bench_runtime(int size, char** input) {
-  Runtime runtime{size, input, 0};
+  Runtime runtime{size, input, 0, BATCH_SIZE};
   auto threaded = clocks_with_median(runtime);
   auto serial = clocks_with_median([&runtime] { runtime.serial(); });
 
