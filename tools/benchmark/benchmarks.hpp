@@ -6,6 +6,7 @@
 #include "solver.hpp"
 #include <iostream>
 #include <string>
+#include <thread>
 #include <vector>
 
 namespace quadratics {
@@ -69,6 +70,20 @@ inline std::string bench_parser_and_solver_serial(int size, char** input) {
          "  Parser: " +
          std::to_string(parser_result) + "\n" +
          "  Solver: " + std::to_string(solver_result) + "\n";
+}
+
+// Measure creation and destruction of a thread
+inline std::string bench_thread() {
+  auto test_thread = [] {
+    std::thread thread([] {});
+    thread.join();
+  };
+
+  auto thread = clocks_with_median(test_thread);
+
+  return "Thread creation and destruction:\n"
+         "  Thread: " +
+         format_clocks(thread);
 }
 
 } // namespace quadratics
