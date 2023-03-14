@@ -36,7 +36,7 @@ private:
 
 private:
   Data data_;
-  int current_pos_{1}; // currently going over raw argv[], skipping program name
+  int current_pos_{0};
   EquationQueue& queue_;
 };
 

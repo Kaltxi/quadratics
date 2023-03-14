@@ -5,11 +5,13 @@
 
 using namespace quadratics;
 
-int main(int size, char** input) {
+int main(int arg_count, char* args[]) {
   std::ios_base::sync_with_stdio(false);
 
   std::vector<std::string> results;
-  results.push_back(bench_runtime(size, input));
+
+  // Skipping the first arg which contains program's name
+  results.push_back(bench_runtime(arg_count - 1, args + 1));
   results.push_back(bench_solve());
   print_vec(results);
 
