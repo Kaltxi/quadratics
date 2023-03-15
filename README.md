@@ -39,9 +39,10 @@ Simply call the program and specify coefficients as command line arguments:
 
 - Uses Object-Oriented Design
 - Multithreading is implemented with Consumer-Producer pattern, with producer
-  parsing the command line arguments and consumer solving the equations and outputting the results
+  parsing the command line arguments and consumer solving the equations and
+  outputting the results
 
-## Possible improvements
+## Observations and possible improvements
 
 - As per specification, the program to use command line args, which limits the
   size of input. A better approach would be to also allow reading from standard
@@ -49,6 +50,16 @@ Simply call the program and specify coefficients as command line arguments:
 - The simplicity of the task makes the threading an overkill, a sequential
   solution is significantly faster, when it is passed little data, as spinning
   up threads and allocating memory for them is very expensive.
+- On Linux threaded approach yeilds about 30% performance on larger datasets
+  (1000 equations), but on Windows, with limited testing, the price for spinning
+  up thread seems astronomical, and threading is extremely slow.
+- Looking at profiler it seems that the most cycles are spent on
+  `std::to_string` converting the solution roots. Parsing is a small load, which
+  makes sense, since we're using command-line arguments, and they are already
+  in memory.
+- For Linux the optimal number of solver threads seems to be around the number of
+  actual hardware cores. I leave auto detection to use logical core, but perhaps
+  halving this number will be a good decision, more testing is needed.
 
 ## Building
 
