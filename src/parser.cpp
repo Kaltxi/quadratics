@@ -13,6 +13,7 @@ Parser::Parser(const Data data, EquationQueue& queue, const size_t batch_size)
 void Parser::operator()() {
   auto [mutex, data_ready] = queue_.subscribe();
 
+  // Batch buffer
   std::vector<Equation> equations;
   equations.reserve(batch_size_);
 
@@ -21,23 +22,23 @@ void Parser::operator()() {
 
     // Parse a batch of equations
     for (size_t i = 0; i < batch_size_; ++i) {
-      const auto eq = next_equation();
+      const auto equation = next_equation();
 
-      if (!eq) {
+      if (!equation) {
         break;
       }
 
-      equations.push_back(eq.value());
+      equations.push_back(equation.value());
     }
 
     if (equations.empty()) {
-      const std::lock_guard lock{mutex};
+      const std::lock_guard queue_lock{mutex};
       queue_.set_data_ended(true);
       data_ready.notify_all();
       break;
     }
 
-    const std::lock_guard lock{mutex};
+    const std::lock_guard queue_lock{mutex};
     for (const auto eq : equations) {
       queue_.push(eq);
     }

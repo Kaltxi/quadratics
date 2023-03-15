@@ -14,10 +14,11 @@ Solver::Solver(EquationQueue& queue, std::mutex& stdout_mutex,
 void Solver::operator()() {
   auto [mutex, data_ready] = queue_.subscribe();
 
+  // Batch buffer
   std::vector<Equation> equations;
   equations.reserve(batch_size_);
-
   std::vector<std::string> solutions;
+  solutions.reserve(batch_size_);
 
   while (true) {
     equations.clear();
@@ -36,9 +37,17 @@ void Solver::operator()() {
     }
     queue_lock.unlock();
 
-    for (const auto eq : equations) {
-      const auto sol = eq.solve();
-      solutions.push_back(eq.as_str() + " => " + sol.as_str() + "\n");
+    for (const auto equation : equations) {
+      const auto solution = equation.solve();
+
+      std::string result;
+      result.reserve(60);
+      result.append(equation.as_str());
+      result.append(" => ");
+      result.append(solution.as_str());
+      result.append("\n");
+
+      solutions.push_back(result);
     }
 
     const std::lock_guard stdout_lock(stdout_mutex_);
@@ -66,16 +75,19 @@ void Solver::serial() {
       equations.push_back(queue_.pop());
     }
 
-    for (const auto eq : equations) {
-      const auto sol = eq.solve();
+    for (const auto equation : equations) {
+      const auto solution = equation.solve();
+
       std::string result;
       result.reserve(60);
-      result.append(eq.as_str());
+      result.append(equation.as_str());
       result.append(" => ");
-      result.append(sol.as_str());
+      result.append(solution.as_str());
       result.append("\n");
+
       solutions.push_back(result);
     }
+
     for (const auto& solution : solutions) {
       std::cout << solution;
     }

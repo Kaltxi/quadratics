@@ -5,6 +5,7 @@
 
 namespace quadratics {
 
+// Value type for quadratic equation solution (roots and extremum)
 struct Solution {
   enum class Roots { None, One, Two };
 
@@ -17,6 +18,7 @@ struct Solution {
   auto num_roots() const -> int;
 };
 
+// Value type for quadratic equation coefficient
 struct Equation {
   int a;
   int b;

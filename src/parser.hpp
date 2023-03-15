@@ -39,6 +39,9 @@ private:
   Data data_;
   int current_pos_{0};
   size_t batch_size_;
+
+  // Taking the queue as a reference, as it is a necessary precondition for its
+  // lifetime to be valid during parser execution
   EquationQueue& queue_;
 };
 

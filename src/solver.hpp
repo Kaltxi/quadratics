@@ -24,6 +24,8 @@ public:
   void serial();
 
 private:
+  // Taking the queue as a reference, as it is a necessary precondition for its
+  // lifetime to be valid during parser execution
   EquationQueue& queue_;
   std::mutex& stdout_mutex_;
   size_t batch_size_;
