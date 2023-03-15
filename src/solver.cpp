@@ -68,9 +68,14 @@ void Solver::serial() {
 
     for (const auto eq : equations) {
       const auto sol = eq.solve();
-      solutions.push_back(eq.as_str() + " => " + sol.as_str() + "\n");
+      std::string result;
+      result.reserve(60);
+      result.append(eq.as_str());
+      result.append(" => ");
+      result.append(sol.as_str());
+      result.append("\n");
+      solutions.push_back(result);
     }
-
     for (const auto& solution : solutions) {
       std::cout << solution;
     }
