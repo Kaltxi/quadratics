@@ -107,7 +107,7 @@ For example:
 
 ```sh
 # Build tests and run them
-> cmake -DCMAKE_BUILD_TYPE:STRING=Release -DENABLE_TESTING -B./build
+> cmake -DCMAKE_BUILD_TYPE:STRING=Release -DENABLE_TESTING:BOOL=TRUE -B./build
 > cmake --build ./build --config Release --target quadratics_test --
 > ./build/quadratics_test
 
