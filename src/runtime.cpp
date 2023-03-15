@@ -2,6 +2,7 @@
 #include "equationqueue.hpp"
 #include "parser.hpp"
 #include "solver.hpp"
+#include <algorithm>
 #include <thread>
 #include <vector>
 
@@ -14,7 +15,13 @@ Runtime::Runtime(const int size, char** input, const size_t threads,
 void Runtime::operator()() {
   // Minimum number of threads used is 2 - one for parser and one for solver
   // Additional solvers are launched when more threads are available
-  const size_t solver_threads = threads_ <= 0 ? hardware_threads() : threads_;
+  const size_t recommended_threads =
+      threads_ <= 0 ? hardware_threads() : threads_;
+
+  // Don't spin extra threads when there aren't enough batches to saturate them
+  const size_t max_threads =
+      (static_cast<size_t>(size_) + batch_size_ - 1) / batch_size_;
+  const size_t solver_threads = std::min(recommended_threads, max_threads);
 
   EquationQueue queue;
   std::mutex stdout_mutex;
