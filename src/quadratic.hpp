@@ -1,7 +1,6 @@
 #pragma once
 #include <cmath>
 #include <string>
-#include <variant>
 
 namespace quadratics {
 
@@ -16,6 +15,9 @@ struct Solution {
 
   auto as_str() const -> std::string;
   auto num_roots() const -> int;
+
+private:
+  static auto to_str(float value) -> std::string;
 };
 
 // Value type for quadratic equation coefficient
