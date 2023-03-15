@@ -27,7 +27,7 @@ Simply call the program and specify coefficients as command line arguments:
   ```
 
 - Processes many sets of parameters by treys in a multithreaded fashion, if a
-  paricular trey is ill-formed it is ignored
+  particular trey is ill-formed, it is ignored
   ```sh
   > ./quadratics 0 1 2 1 -5 6 as df 5 1 4 -5
   (0 1 2) => (-2.000000) Xmin=-2.000000
@@ -46,14 +46,14 @@ Simply call the program and specify coefficients as command line arguments:
 
 - As per specification, the program to use command line args, which limits the
   size of input. A better approach would be to also allow reading from standard
-  input stream, which will allow processing of large dataset files.
+  input stream for processing of large dataset files.
 - The simplicity of the task makes the threading an overkill, a sequential
-  solution is significantly faster, when it is passed little data, as spinning
+  solution is significantly faster when it is passed little data, as spinning
   up threads and allocating memory for them is very expensive.
-- On Linux threaded approach yeilds about 30% performance on larger datasets
+- On Linux threaded approach yields about 30% performance on larger datasets
   (1000 equations), but on Windows, with limited testing, the price for spinning
   up thread seems astronomical, and threading is extremely slow.
-- Looking at profiler it seems that the most cycles are spent on
+- Looking at profiler, it seems that the most cycles are spent on
   `std::to_string` converting the solution roots. Parsing is a small load, which
   makes sense, since we're using command-line arguments, and they are already
   in memory.
@@ -86,8 +86,8 @@ can supply additional targets to `cmake` or build them all.
  -2 -58 -94 3 11 61 -75 -42 55
 ```
 
-Additional options are avalilable for testing and analysis that can be supplied
-to cmake with `-D` prefix:
+Additional options are available for testing and analysis that can be supplied
+to `Cmake` with `-D` prefix:
 
 - `ENABLE_COVERAGE` for code coverage
 - `ENABLE_ASAN` for address sanitizer
@@ -98,7 +98,7 @@ to cmake with `-D` prefix:
 - `FORCE_COLORED_OUTPUT` for compiler colored input (enabled by default)
 
 > Note that for tests `doctest` library needs to be installed and findable by
-> `CMake`. For example it can be installed with `vcpkg`, don't forget to supply
+> `CMake`. For example, it can be installed with `vcpkg`, don't forget to supply
 > `-DCMAKE_TOOLCHAIN_FILE:STRING=<path>/vcpkg/scripts/buildsystems/vcpkg.cmake`
 > to `CMake` during build system script generation to for it to discover the
 > libraries.
