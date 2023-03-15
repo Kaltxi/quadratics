@@ -1,7 +1,7 @@
 # Benchmarks
 
 Here is the list of benchmarks done during various points of development to
-estimate the performance. The values are median of 10000 `rdtsc` readings.
+estimate the performance. The values are median of 1000 `rdtsc` readings.
 
 Measurements were done on a development laptop plugged in, with 6/12 core
 AMD Ryzen 5600.
