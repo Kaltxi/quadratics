@@ -54,7 +54,8 @@ Simply call the program and specify coefficients as command line arguments:
   (1000 equations), but on Windows, with limited testing, the price for spinning
   up thread seems astronomical, and threading is extremely slow.
 - Looking at profiler, it seems that the most cycles are spent on
-  `std::to_string` converting the solution roots. Parsing is a small load, which
+  `std::to_string` converting the solution roots, so I changed it to
+  `std::to_chars` which made it a bit better. Parsing is a small load, which
   makes sense, since we're using command-line arguments, and they are already
   in memory.
 - For Linux the optimal number of solver threads seems to be around the number of
