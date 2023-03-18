@@ -53,8 +53,16 @@ auto Parser::parse_coefficients(int position, int tail, char** input)
   for (int i = 0; i < 3; ++i) {
     // Only attempt to parse of there are string left
     if (tail >= i + 1) {
+
       const auto* str = input[position + i];
+
+      // Allow positive numbers starting with plus sign
+      if (str[0] == '+') {
+        str = &str[1];
+      }
+
       const auto len = std::strlen(str);
+
       const auto result =
           std::from_chars(str, str + len, coefs[static_cast<size_t>(i)]);
 
